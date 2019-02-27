@@ -14,13 +14,20 @@ public class SignInTest {
 
         setDriverPath();
         WebDriver driver = new ChromeDriver();
+        WebDriverWait wait = new WebDriverWait(driver, 20);
         driver.get("https://www.cleartrip.com/");
         waitFor(2000);
 
-        driver.findElement(By.linkText("Your trips")).click();
-        driver.findElement(By.id("SignIn")).click();
+        driver.manage().window().maximize();
+        WebElement yourTrip = driver.findElement(By.linkText("Your trips")); 
+        WebElement SignIn = driver.findElement(By.id("SignIn"));
+        
+        clickElement(yourTrip);
+        clickElement(SignIn);
 
-        driver.findElement(By.id("signInButton")).click();
+        driver.switchTo().frame("modal_window");
+    	WebElement signInButton = driver.findElement(By.id("signInButton"));
+        clickElement(signInButton);
 
         String errors1 = driver.findElement(By.id("errors1")).getText();
         Assert.assertTrue(errors1.contains("There were errors in your submission"));
@@ -33,6 +40,16 @@ public class SignInTest {
         } catch (InterruptedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+    }
+    
+    private boolean ExplicitWait(WebElement elem) {
+    	WebDriverWait wait = new WebDriverWait(driver, 20);
+    	boolean elemExist = wait.until(ExpectedConditions.invisibilityOfElementLocated((By) elem));
+		return elemExist;
+    }
+    
+    private void clickElement(WebElement elem) {
+    	elem.click();
     }
 
     private void setDriverPath() {
