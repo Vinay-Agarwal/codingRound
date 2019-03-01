@@ -7,13 +7,10 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.Test;
 
 public class HotelBookingTest {
-
-    WebDriver driver = new ChromeDriver();
-
-    @FindBy(linkText = "Hotels")
-    private WebElement hotelLink;
-
-    @FindBy(id = "Tags")
+     @FindBy(xpath= "//*[@class='hotelApp ']")
+    public WebElement hotelLink;
+    
+    @FindBy(xpath = "//*[@id='Tags']")
     private WebElement localityTextBox;
 
     @FindBy(id = "SearchHotelsButton")
@@ -22,13 +19,17 @@ public class HotelBookingTest {
     @FindBy(id = "travellersOnhome")
     private WebElement travellerSelection;
 
+    public void HotelBookingTest(WebDriver driver) {
+        PageFactory.initElements(driver, this);
+    }
+    
     @Test
     public void shouldBeAbleToSearchForHotels() {
         setDriverPath();
-
+        driver = new ChromeDriver();
+        HotelBookingTest(driver);
         driver.get("https://www.cleartrip.com/");
         hotelLink.click();
-
         localityTextBox.sendKeys("Indiranagar, Bangalore");
 
         new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
