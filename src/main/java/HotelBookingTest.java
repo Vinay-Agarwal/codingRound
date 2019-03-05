@@ -2,6 +2,9 @@ package main.java;
 
 import com.sun.javafx.PlatformUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -34,56 +37,39 @@ public class HotelBookingTest {
     @FindBy(xpath = "//*[@class='ui-state-default ']")
     public List<WebElement> CheckoutDateSelctor;
     
+    @FindBy(xpath= "//*[@id='ui-datepicker-div']")
+    public WebElement CalendarDiv;
+    
+    
     public void HotelBookingTest(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
 
     @Test
     public void shouldBeAbleToSearchForHotels() {
-        setDriverPath();
-        driver = new ChromeDriver();
+    	BasePage basePageObj = new BasePage();
+    	driver =basePageObj.setDriverPath();
         HotelBookingTest(driver);
         driver.get("https://www.cleartrip.com/");
         hotelLink.click();
        	localityTextBox.sendKeys("Indiranagar, Bangalore");	
-       	waitFor(4000);
-       	boolean LocationListDisplayed = driver.findElement(By.xpath("//*[@class='list']")).isDisplayed();
-       	System.out.println("Location list displayed: " + LocationListDisplayed);
+       	basePageObj.waitFor(6000);
+       //boolean LocationListDisplayed = driver.findElement(By.xpath("//*[@class='list']")).isDisplayed();
+       
        	List<WebElement> LocationList = driver.findElements(By.xpath("//*[@class='list']"));
-       	if(LocationListDisplayed) {
-       		LocationList.get(0).click();
-       	}
+       	LocationList.get(0).click();
        	
+       	/*boolean CalendarVisible = CalendarDiv.isDisplayed();
+       	System.out.println("Calendar is present : "+CalendarVisible);
        	//Selecting current date as start date and +1 for End Date
+       	
+       	
        	CheckInDateSelector.click();
-       	CheckoutDateSelctor.get(0).click();
-       	
-       	
-        new Select(travellerSelection).selectByVisibleText("2 rooms, 4 adults");
+       	CheckoutDateSelctor.get(0).click();*/
+       	new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
         searchButton.click();
       //  driver.quit();
         
-    }
-    
-    private void waitFor(int durationInMilliSeconds) {
-        try {
-            Thread.sleep(durationInMilliSeconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-    }
-    
-
-	private void setDriverPath() {
-        if (PlatformUtil.isMac()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
-        }
-        if (PlatformUtil.isWindows()) {
-        	System.setProperty("webdriver.chrome.driver", "C:\\Users\\vinay.kumar.agarwal\\Downloads\\chromedriver_win32_Latest\\chromedriver.exe");
-        }
-        if (PlatformUtil.isLinux()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-        }
     }
 
 }
